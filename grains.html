@@ -1,0 +1,266 @@
+<html>
+
+<head>
+  <script src = "https://d3js.org/d3.v3.min.js"></script>
+  <style>
+  
+  .axis path, .axis line {
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+	}
+  
+  
+  
+  </style>
+  
+  
+</head>
+<body>
+
+</body>
+
+<h1>Production of grains in Winter months</h1>
+
+<div>
+  <div id = "b1">
+    <input type = "button" id = "b1" value = "September 2013">
+  </div>
+  <br>
+  <div id = "b2">
+    <input type = "button" id = "b2" value = "October 2013">
+  </div>
+  <br>
+  <div id = "b3">
+    <input type = "button" id = "b3" value = "November 2013">
+  </div>
+  <br>
+  <div id = "b4">
+    <input type = "button" id = "b3" value = "December 2013">
+  </div>
+  
+  </div>
+
+<script>
+  var height = 500;
+  var width = 600;
+  var margin =
+  {
+    left : 80,
+    right : 40,
+    top : 40,
+    bottom : 30
+  };
+  
+  var svg = d3.select('body').append('svg')
+              .attr('width',width + margin.left+margin.right)
+              .attr('height',height+margin.top+margin.bottom)
+              .append('g')
+              .attr('transform','translate('+margin.left+','+margin.top+')');
+  
+  //Scales for x and y axis
+  var x = d3.scale.ordinal()
+            .rangeRoundBands([0,width]);
+  var y = d3.scale.linear()
+            .range([height,0]);
+  
+  //X-axis
+  var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+
+  //Y-axis
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left");
+    
+  //var months = ['9-2013', '10-2013', '11-2013', '12-2013', '1-2014', '2-2014', '3-2014', '4-2014', '5-2014', '6-2014'];
+  var grains =  ['Rice','Paddy','Wheat'];
+  var colors = ['#810038','#008080','#0155e5','steelblue'];
+  var color = d3.scale.ordinal()
+		.domain([9,10,11,12])
+		.range(colors);
+    
+  d3.csv("/static/Production_of_Agriculture_Stock-Ministry_of_Finance.csv",function(data){
+  
+  //console.log(data);
+  
+  x.domain(grains);
+  y.domain([0,50]);
+  
+  svg.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + height + ")")
+			.call(xAxis)
+			.append("text")
+				.attr("class", "label")
+				.attr("x", width)
+				.attr("y", -6)
+				.style("text-anchor", "end")
+				.text("Cereals");
+
+		//y axis
+		svg.append("g")
+			.attr("class", "y axis")
+      //.attr("transform", "translate("+margin.left+ ",0)")
+			.call(yAxis)
+			.append("text")
+				.attr("class", "label")
+				.attr("transform", "rotate(-90)")
+				.attr("y", 6)
+				.attr("dy", ".71em")
+				.style("text-anchor", "end")
+				.text("Grain production (tonnes)");
+ 
+ 
+    function drawBars(val)
+    {
+    
+    console.log(val);
+
+    var bars = svg.selectAll('.bar')
+    .data(data.slice(1,4))
+    
+    bars.enter()
+    .append('rect')
+    .attr('class','bar')
+    
+    /*.attr({
+      transform: function (d, i) {
+        return 'translate(' + x(grains[i]) + ', 0)';
+      }})*/
+
+    
+    
+    if(val==1)
+    {
+    
+      console.log("inif");
+      bars.transition()
+          .duration(1000)
+          .style('fill', function(d,i){ return colors[0]; })
+          .attr({
+          //y: height,
+          //height: 0,
+          width: function(d) {return x.rangeBand(d) - 1;},
+      })
+      //.transition()
+      //.duration(1500)
+      .attr({
+      y: function (d, i) {
+          return y(d['9-2013']);
+      },
+      height: function (d, i) {
+          return height - y(d['9-2013']);},
+      x: function(d,i){ return x(grains[i]); }
+      
+      });
+    }
+    
+    else if(val==2)
+    {
+     console.log("inif");
+      bars.transition()
+          .duration(1000)
+          .style('fill', function(d,i) {return colors[1]; })
+          .attr({
+          //y: height,
+          //height: 0,
+          width: function(d) {return x.rangeBand(d) - 1;},
+      })
+      //.transition()
+      //.duration(1500)
+      .attr({
+      y: function (d, i) {
+          return y(d['10-2013']);
+      },
+      height: function (d, i) {
+          return height - y(d['10-2013']);},
+      x: function(d,i){ return x(grains[i]); }
+      
+      });
+    }
+    
+    else if(val==3)
+    {
+     console.log("inif");
+      bars.transition()
+          .duration(1000)
+          .style('fill', function(d,i){return colors[2]; })
+          .attr({
+          //y: height,
+          //height: 0,
+          width: function(d) {return x.rangeBand(d) - 1;},
+      })
+      //.transition()
+      //.duration(1500)
+      .attr({
+      y: function (d, i) {
+          return y(d['11-2013']);
+      },
+      height: function (d, i) {
+          return height - y(d['11-2013']);},
+      x: function(d,i){ return x(grains[i]); }
+      
+      });
+    }
+    
+    else if(val==4)
+    {
+     console.log("inif");
+      bars.transition()
+          .duration(1000)
+          .style('fill', function(d,i){return colors[3]; })
+          .attr({
+          //y: height,
+          //height: 0,
+          width: function(d) {return x.rangeBand(d) - 1;},
+      })
+      //.transition()
+      //.duration(1500)
+      .attr({
+      y: function (d, i) {
+          return y(d['12-2013']);
+      },
+      height: function (d, i) {
+          return height - y(d['12-2013']);},
+      x: function(d,i){ return x(grains[i]); }
+      
+      });
+    }
+
+}
+    
+    
+  d3.select("#b1")
+        .on("click", function(d,i) {
+            drawBars(1)
+        })   
+    d3.select("#b2")
+        .on("click", function(d,i) {
+            drawBars(2)
+        })  
+        
+    d3.select("#b3")
+        .on("click", function(d,i) {
+            drawBars(3)
+        }) 
+    d3.select("#b4")
+        .on("click", function(d,i) {
+            drawBars(4)
+        })     
+    
+    
+        
+        
+      drawBars(1);
+  
+    
+  
+  
+  });
+  
+  
+</script>
+
+</html>
